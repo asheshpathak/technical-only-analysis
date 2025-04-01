@@ -1,0 +1,13 @@
+setuptools~=69.0.0  # Required for Python 3.12 (list first to avoid build issues)
+kiteconnect~=4.1.0  # Zerodha API client
+pandas~=2.1.0  # Data manipulation
+numpy~=1.26.0  # Numerical operations (compatible with Python 3.12)
+ta~=0.10.2  # Technical analysis
+pytz~=2023.3  # Timezone handling
+python-dateutil~=2.8.2  # Date manipulation
+pyOpenSSL~=23.1.1  # For SSL certificates
+loguru~=0.7.0  # Better logging
+scipy~=1.11.3  # Required for technical analysis
+matplotlib~=3.8.0  # For visualization
+python-dotenv~=1.0.0  # For loading environment variables from .env file
+flask~=2.3.0  # For authentication callback server
