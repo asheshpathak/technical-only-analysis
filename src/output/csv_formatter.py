@@ -89,19 +89,18 @@ class CSVFormatter:
 
         Args:
             signal_data: Dictionary with signal data
-            filename: Output filename (if None, generated from symbol and timestamp)
+            filename: Output filename (if None, generated from symbol)
 
         Returns:
             Path to saved file
         """
         try:
-            # Get symbol and timestamp
+            # Get symbol
             symbol = signal_data.get("basic_info", {}).get("symbol", "unknown")
-            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
             # Generate filename if not provided
             if not filename:
-                filename = f"{symbol}_{timestamp}.csv"
+                filename = f"{symbol}_signal.csv"
 
             # Ensure .csv extension
             if not filename.endswith('.csv'):
@@ -127,28 +126,17 @@ class CSVFormatter:
             logger.error(f"Error saving signal to CSV file: {e}")
             return None
 
-    def save_all_signals(self, signals_data, filename=None):
+    def save_all_signals(self, signals_data, filename="trading_signals.csv"):
         """Save all signals data to a single CSV file.
 
         Args:
             signals_data: Dictionary with signal data for multiple symbols
-            filename: Output filename (if None, generated from timestamp)
+            filename: Output filename (defaults to a fixed name)
 
         Returns:
             Path to saved file
         """
         try:
-            # Generate timestamp
-            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-
-            # Generate filename if not provided
-            if not filename:
-                filename = f"all_signals_{timestamp}.csv"
-
-            # Ensure .csv extension
-            if not filename.endswith('.csv'):
-                filename += '.csv'
-
             # Create full path
             file_path = self.output_dir / filename
 

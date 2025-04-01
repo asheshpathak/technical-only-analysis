@@ -166,6 +166,13 @@ def main():
         json_formatter = JSONFormatter()
         csv_formatter = CSVFormatter()
 
+        # Save both JSON and CSV with fixed filenames
+        json_path = json_formatter.save_all_signals(signals, "trading_signals.json")
+        csv_path = csv_formatter.save_all_signals(signals, "trading_signals.csv")
+
+        logger.info(f"Saved signals as JSON to {json_path}")
+        logger.info(f"Saved signals as CSV to {csv_path}")
+
         # Generate timestamp for filenames
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 

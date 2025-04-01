@@ -36,19 +36,18 @@ class JSONFormatter:
 
         Args:
             signal_data: Dictionary with signal data
-            filename: Output filename (if None, generated from symbol and timestamp)
+            filename: Output filename (if None, generated from symbol)
 
         Returns:
             Path to saved file
         """
         try:
-            # Get symbol and timestamp
+            # Get symbol
             symbol = signal_data.get("basic_info", {}).get("symbol", "unknown")
-            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
             # Generate filename if not provided
             if not filename:
-                filename = f"{symbol}_{timestamp}.json"
+                filename = f"{symbol}_signal.json"
 
             # Ensure .json extension
             if not filename.endswith('.json'):
@@ -69,34 +68,34 @@ class JSONFormatter:
             logger.error(f"Error saving signal to JSON file: {e}")
             return None
 
-    def save_all_signals(self, signals_data, filename=None):
+    def save_all_signals(self, signals_data, filename="trading_signals.json"):
         """Save all signals data to a single JSON file.
 
         Args:
             signals_data: Dictionary with signal data for multiple symbols
-            filename: Output filename (if None, generated from timestamp)
+            filename: Output filename (defaults to a fixed name)
 
         Returns:
             Path to saved file
         """
         try:
-            # Generate timestamp
-            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-
-            # Generate filename if not provided
-            if not filename:
-                filename = f"all_signals_{timestamp}.json"
-
-            # Ensure .json extension
-            if not filename.endswith('.json'):
-                filename += '.json'
-
             # Create full path
             file_path = self.output_dir / filename
 
+            # Create output structure
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            output_data = {
+                "metadata": {
+                    "generated_at": timestamp,
+                    "version": "1.0.0",
+                    "stock_count": len(signals_data)
+                },
+                "stocks": list(signals_data.values())
+            }
+
             # Write to file
             with open(file_path, 'w') as f:
-                json.dump(signals_data, f, indent=2)
+                json.dump(output_data, f, indent=2)
 
             logger.info(f"Saved all signals data to {file_path}")
 

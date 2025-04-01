@@ -173,7 +173,7 @@ class TechnicalAnalysis:
             )
 
             # Fill NaN values
-            df_result = df_result.fillna(method='bfill')
+            df_result = df_result.bfill()
 
             logger.debug("Technical indicators calculated successfully")
 
@@ -329,7 +329,13 @@ class TechnicalAnalysis:
             confidence = (sell_signals / total_signals) * 100
         else:
             signal = "HOLD"
-            confidence = 50  # Neutral confidence
+            # Calculate confidence more dynamically for HOLD signals
+            # Use the strength of the strongest signal type
+            max_signal = max(buy_signals, sell_signals)
+            if max_signal > 0:
+                confidence = (max_signal / total_signals) * 100
+            else:
+                confidence = 20  # Lower default if truly neutral
 
         # Add final signal to DataFrame
         signal_df.loc[df.index[-1], 'signal'] = signal
